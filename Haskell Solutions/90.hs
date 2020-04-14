@@ -47,6 +47,6 @@ main = do
     let extended_pairs = (map.map) extended pairs
     
     --count how many pairs can make each square
-    let ans = length (filter (==True) $ map (square_pair) extended_pairs)
+    let ans = length $ filter (square_pair) extended_pairs
     
     print ans
