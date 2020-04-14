@@ -39,7 +39,7 @@ main = do
     
     --get each possible pairs from the above
     --note that we eliminate duplicates so that
-    --there are (210^2 + 10 choose 6)/2 unique pairs
+    --there are 22155 = (210^2 + 10 choose 6)/2 unique pairs
     --this elimination could be implemented much more efficiently
     let pairs   = nub (map (sort) $ replicateM 2 distict)
     
