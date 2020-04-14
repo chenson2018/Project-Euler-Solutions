@@ -4,6 +4,7 @@
 import Data.List (tails)
 import Math.NumberTheory.Primes
 
+gather :: Int -> [a] -> [[a]]
 gather n = map (take n) . dropLast n . tails
     where dropLast n xs = zipWith const xs (drop n xs)
     

@@ -8,7 +8,8 @@ splitPan :: String -> Int -> Bool
 splitPan x n = all (==0) remain
     where remain = zipWith (\x y -> x `mod` y) splits [2, 3, 5, 7, 11, 13, 17]
           splits = map (read) (drop 1 (gather n x))
-          
+
+gather :: Int -> [a] -> [[a]]          
 gather n = map (take n) . dropLast n . tails
     where dropLast n xs = zipWith const xs (drop n xs)
 
