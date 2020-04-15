@@ -10,7 +10,7 @@
 \noindent{Chris Henson}\\
 Project Euler Questions 137/140\\
 
-This short write-up will walk through the process that I used to solve Project Euler questions 137/140, and describe some of the benefit I found in using Haskell to code this solution.
+This short write-up will walk through some of the mathematical derivations that I used to solve Project Euler questions 137/140.
 
 First, let us recall the definition of the Fibbonacci numbers. We start with:
 
@@ -135,7 +135,7 @@ $$
 
 \newpage
 
-The next question under consideration is rational values of x give an integer value for our power series? I will write:
+The next question under consideration is which rational values of x give an integer value for our power series? I will write:
 
 $$
 s(x) = \sum_{k=1}^\infty G_k x^k = G_0 + G_1 x + G_2 x^2
@@ -230,6 +230,12 @@ m &= \dfrac{1}{2} (\varphi^{2j} + \psi^{2j} + F_{2j})\\
 
 \newpage
 
+Finally, subsituting this back into the original series gives:
+
+$$
+\sum_{k=1}^\infty F_k (F_{2j}/F_{2j+1})^k = F_{2j}F_{2j+1}, \quad j \geq 1
+$$
+
 What an unexpected resutl! That we could consider successive coeffients in identify this rational points is certainly not intuitive. We see that these numbers also grow very quickly:
 
 \begin{align*}
@@ -238,7 +244,7 @@ F_{2j}F_{2j+1}, n \in \mathbb{Z}^+= \{2, &15, 104, 714, 4895, 33552, 229970, 157
 \end{align*}
 
 
-The last number in this list is the solution to problem 137. Problem 140 considers the initalization $G_0 = 3$ and $G_1 = 1$.
+The last number in this list is the solution to problem 137. Problem 140 considers the initalization $G_0 = 3$ and $G_1 = 1$, which give a more complicated sort of equation that determines the rational points. Still, they can be written entirely in terms of the Fibbonacci series.
 
 
 
