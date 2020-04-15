@@ -1,11 +1,251 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{pdfpages}
-\graphicspath{ {./images/} }
-
+\usepackage{amssymb}
+\usepackage[svgnames]{xcolor}
+\usepackage[colorlinks=true, linkcolor=Maroon, urlcolor=Blue]{hyperref}
+\setlength{\parskip}{.75em}
 
 \begin{document}
-Chris Henson
+
+\noindent{Chris Henson}\\
+Project Euler Questions 137/140\\
+
+This short write-up will walk through the process that I used to solve Project Euler questions 137/140, and describe some of the benefit I found in using Haskell to code this solution.
+
+First, let us recall the definition of the Fibbonacci numbers. We start with:
+
+$$
+F_0=0,\quad F_1= 1
+$$
+
+and define further numbers by the relation:
+
+$$
+F_n=F_{n-1} + F_{n-2}
+$$
+
+This gives us the first few terms:
+
+$$
+0,\;1,\;1,\;2,\;3,\;5,\;8,\;13,\;21,\;34,\;55,\;89,\;144,\; \ldots
+$$
+
+(Please note that Project Euler omits the first index, but this will not change our calculations in any meaningful way, and I will try to be as explicit as possible about this.)
+
+The natural generalization is to consider a different starting point. I will write 
+
+$$
+G(a, b, n) = G(a, b, n-1) + G(a, b, n-2)
+$$
+
+given the starting point:
+
+$$
+G(a, b, 0) = a,\quad G(a, b, 1) = b
+$$
+
+and when we are working with a set $a$ and $b$ I will simply write $G_n$. You can see that $G(0, 1 , n)$ gives the Fibbonacci numbers themselves.
+
+\newpage
+
+These two Project Euler questions are concerned with the power series with coefficients given by the above sequences. That is, we are interested in the value of the summations:
+
+$$
+\sum_{k=1}^\infty G(a, b, n) x^k = G(a, b, 1)x + G(a, b, 2)x^2 + G(a, b, 3)x^3 + \dots
+$$
+
+Again, if we take $a=0$ and $b=1$, we will have the Fibbonacci numbers:
+
+\begin{align*}
+\sum_{k=1}^\infty G(0, 1, n) x^k &= F_1x + F_2x^2 + F_3x^3 + \dots \\
+					  & = x + x^2 + 2x^3 + 3x^4 +5x^5 \dots
+\end{align*}
+
+Interestingly, it is not too difficult to derive a closed form solution to these series. Let us fix $G_0 = a$ and $G_1 = b$. Then the power series is:
+
+\begin{align*}
+\sum_{k=0}^\infty G_k x^k = G_0 + G_1 x + G_2 x^2 + \dots
+\end{align*}
+
+Please note that I have included the initial term $G_0$ that Project Euler omits. We can correct for this at the end by simply subtracting this term.
+
+\newpage
+
+First, I will pull out the first two given terms from the series:
+
+\begin{align*}
+\sum_{k=0}^\infty G_k x^k = G_0 + G_1x + \sum_{k=2}^\infty G_k x^k
+\end{align*}
+
+Now I can Replace $G_k$  with the relation that defines it, and split apart the summation further:
+
+
+\begin{align*}
+\sum_{k=0}^\infty G_k x^k &= G_0 + G_1x + \sum_{k=2}^\infty (G_{k-1} + G_{k-2}) x^k \\
+				   &= G_0 + G_1x +  \sum_{k=2}^\infty G_{k-1} x^k + \sum_{k=2}^\infty G_{k-2} x^k
+\end{align*}
+
+Next, I notice that multiplying my original series by $x$ and $x^2$ gives:
+
+\begin{align*}
+x\sum_{k=0}^\infty G_k x^k &= G_0x + G_1 x^2 + G_2 x^3 + \dots\\
+x^2\sum_{k=0}^\infty G_k x^k &= G_0x^2 + G_1 x^3 + G_2 x^4 + \dots
+\end{align*}
+
+Substituting these into the above equation I have:
+
+\begin{align*}
+\sum_{k=0}^\infty G_k x^k &= G_0 + G_1 x + x\sum_{k=0}^\infty G_k x^k - G_0 x + x^2\sum_{k=0}^\infty G_k x^k
+\end{align*}
+
+\newpage
+
+Denoting the original summation as $s(x)$ this is:
+
+$$
+s(x) =  G_0 + G_1 x + xs(x) - G_0 x + x^2 s(x)
+$$ 
+
+and solving gives:
+
+$$
+s(x) = \dfrac{G_0 - G_0 x + G_1 x}{1 - x - x^2}
+$$
+
+Remember that this includes our first term. So we have\footnote{
+
+Note Project Euler omits the first term, considering instead the series:
+
+$$
+\sum_{k=1}^\infty G_k x^k = G_1 x + G_2 x^2 + \dots =  \dfrac{G_0 - G_0 x + G_1 x}{1 - x - x^2} - G_0
+$$
+
+}:
+
+$$
+\sum_{k=0}^\infty G_k x^k = G_0 + G_1 x + G_2 x^2 + \dots =  \dfrac{G_0 - G_0 x + G_1 x}{1 - x - x^2}
+$$
+
+For the Fibbonacci series we set $G_0 = 0$ and $G_1 = 1$ giving:
+
+$$
+\sum_{k=0}^\infty F_k x^k = F_0 + F_1 x + F_2 x^2 + \dots =  \dfrac{x}{1 - x - x^2}
+$$
+
+
+\newpage
+
+The next question under consideration is rational values of x give an integer value for our power series? I will write:
+
+$$
+s(x) = \sum_{k=1}^\infty G_k x^k = G_0 + G_1 x + G_2 x^2
+$$
+
+Above we had the equation:
+
+$$
+s(x) =  G_0 + G_1 x + xs(x) - G_0 x + x^2 s(x)
+$$ 
+
+which solving for x using the quadratic formula\footnote{We actually have two choices for roots, but one is outside the radius of convergence for the power series} gives us:
+
+$$
+x = \dfrac{-(G_1 - G_0 + s) + \sqrt{(G_1 - G_0 + s)^2 - 4s(G_0-s)}}{2s}
+$$
+
+Remember that we included the term $G_0$. If we would like to correct for this, we can make the transformation $s \rightarrow S - G_0$ where:
+
+\begin{align*}
+S(x)&= \sum_{k=1}^\infty G_k x^k = \\
+       &= \sum_{k=0}^\infty G_k x^k - G_0\\
+       &= s(x) - G_0
+\end{align*}
+
+which gives instead:
+
+$$
+x = \dfrac{-(G_1 + S) + \sqrt{(G_1 + S)^2 - 4(S + G_0)(-S)}}{2(S + G_0)}
+$$
+
+\newpage
+
+Using the second equation and taking $G_0 = 0$ and $G_1 = 1$ to give the Fibbonacci power series, we have have the following values:
+
+\begin{align*}
+S\left(\sqrt{2} -1\right) &= 1\\
+S\left(\dfrac{1}{2}\right) &= 2\\
+S\left(\dfrac{\sqrt{13} - 2}{3}\right) &= 3\\
+S\left(\dfrac{\sqrt{89} - 5}{8}\right) &= 4\\
+\vdots
+\end{align*}
+
+We can see for instance that $S = 2$ has the desired property that $x$ is rational. What conditions must be met for this? First, look at our equation for x we we substitue the particuliar values for $G_0$ and $G_1$:
+
+$$
+x = \dfrac{-(1 + S) + \sqrt{(1 + S)^2 - (2S)^2}}{2S}
+$$
+
+This will be rational exactly when the discriminant $(1 + S)^2 - (2S)^2$ is a perfect square \footnote{The following arguement follows from this article : \href{https://github.com/chenson2018/Project-Euler-Solutions/blob/master/Haskell\%20Solutions/137_and_140/Reference.pdf/}{Link}} 
+
+\newpage
+
+Since the discriminant is itself a sum of two squares, we can consider them as Pythagorean triples so that for integers m, n:
+
+$$
+S + 1 = m^2 - n^2,\quad 2S = 2mn
+$$
+
+This gives the equation:
+
+$$
+m^2 - n^2 = mn + 1
+$$
+
+which can be written as
+
+$$
+(2m-n)^2 = 4 + 5n^2
+$$
+
+We need $4 + 5n^2$ to be a perfect square to ensure a rational x. Unexpectedly, using $n = F_{2j}$ (where j is a positive integer) ensures this is satisfied:
+
+\begin{align*}
+4 + 5n^2 &= 4 + 5F_{2j} = 4 + 5 \left( \frac{(\varphi^{2j}-\psi^{2j})^2}{5} \right)\\
+                &= 4 + \varphi^{4j} - 2(\varphi\psi)^{2j} + \psi^{4j}\\
+                &= \varphi^{4j} + 2 + \psi^{4j}\\
+	     &=   \varphi^{4j} + 2 (\varphi\psi)^{2j}+ \psi^{4j}\\
+	     &= (\varphi^{2j} + \psi^{2j})^2
+\end{align*}
+
+
+
+Furthermore, substituing into the equation $(2m-n)^2 = 4 + 5n^2$  above gives:
+
+\begin{align*}
+m &= \dfrac{1}{2} (\varphi^{2j} + \psi^{2j} + F_{2j})\\
+    &= \dfrac{1}{2} \left( \varphi^{2j} + \psi^{2j} + \frac{\varphi^{2j}-\psi^{2j}}{\sqrt{5}} \right)\\
+    &= \dfrac{\varphi\varphi^{2j} - \psi\psi^{2j}}{\sqrt5} = \dfrac{\varphi^{2j+1} - \psi^{2j+1}}{\sqrt5}\\
+    &= F_{2j+1}
+\end{align*}
+
+\newpage
+
+What an unexpected resutl! That we could consider successive coeffients in identify this rational points is certainly not intuitive. We see that these numbers also grow very quickly:
+
+\begin{align*}
+F_{2j}F_{2j+1}, n \in \mathbb{Z}^+= \{2, &15, 104, 714, 4895, 33552, 229970, 1576239, 10803704, 74049690,\\
+					          &  507544127, 3478759200, 23843770274, 163427632719, 1120149658760, \dots\}
+\end{align*}
+
+
+The last number in this list is the solution to problem 137. Problem 140 considers the initalization $G_0 = 3$ and $G_1 = 1$.
+
+
+
+
+
+
+
+
 
 \end{document}
