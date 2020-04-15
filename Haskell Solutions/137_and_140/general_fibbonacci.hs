@@ -59,7 +59,7 @@ main = do
     --use the generating function with this recursion
     let gen_func = generator_func 3 1
     
-    --nuggets generated recursively fromthe new sequence
+    --nuggets generated recursively from the new sequence
     let g_nug = map (gen_func) $
                 zipWith (%) (filter (>0) $ map (toInteger) [j | (i, j) <- zip [1..] (gen_fib 2 5), odd i]) 
                             (filter (>0) $ map (toInteger) [j | (i, j) <- zip [1..] (gen_fib 2 5), even i])
@@ -71,7 +71,7 @@ main = do
                 
     let nug = take 30 $ merge g_nug f_nug
     
-    --prints the first 12 nuggests for problem 137,
+    --prints the first 12 nuggets for problem 137,
     --and the first 30 for problem 140
     mapM_ print [map (numerator) fib_nugget_2, 
                  [], 
