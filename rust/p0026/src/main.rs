@@ -1,5 +1,5 @@
 // from https://rob.co.bb/posts/2019-02-10-modular-exponentiation-in-rust/
-fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
+fn mod_pow(mut base: usize, mut exp: usize, modulus: usize) -> usize {
     if modulus == 1 {
         return 0;
     }
@@ -15,9 +15,9 @@ fn mod_pow(mut base: u64, mut exp: u64, modulus: u64) -> u64 {
     result
 }
 
-fn n_repeat(n: u64) -> u64 {
+fn n_repeat(n: usize) -> usize {
     let mut power = 1;
-    let mut remainders: Vec<u64> = Vec::new();
+    let mut remainders: Vec<usize> = Vec::new();
     let mut rem;
 
     loop {
@@ -26,7 +26,7 @@ fn n_repeat(n: u64) -> u64 {
         if rem == 0 {
             return 0;
         } else if remainders.contains(&rem) {
-            return remainders.len() as u64
+            return remainders.len()
         } else {
             power += 1;
             remainders.push(rem);
