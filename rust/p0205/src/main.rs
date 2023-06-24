@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 use itertools::Itertools;
 
-fn dist(n_faces: usize, n_dice: usize) -> HashMap<usize, f64> {
-    let mut counts: HashMap<usize, usize> = HashMap::new();
+fn dist(n_faces: u32, n_dice: u32) -> HashMap<u32, f64> {
+    let mut counts: HashMap<u32, u32> = HashMap::new();
     let mult = (0..n_dice).map(|_| (1..=n_faces)).multi_cartesian_product();
 
-    let total = usize::pow(n_faces, n_dice as u32) as f64;
+    let total = u32::pow(n_faces, n_dice) as f64;
 
     for x in mult {
         let count = counts.entry(x.iter().sum()).or_insert(0);
@@ -19,7 +19,7 @@ fn dist(n_faces: usize, n_dice: usize) -> HashMap<usize, f64> {
 }
 
 // checks probability a > b
-fn compare_dist(a: HashMap<usize, f64>, b: HashMap<usize, f64>) -> f64 {
+fn compare_dist(a: HashMap<u32, f64>, b: HashMap<u32, f64>) -> f64 {
     a.iter()
         .map(|(roll_a, p_a)| -> f64 {
             // sum all probabilities for rolls from b that are less
