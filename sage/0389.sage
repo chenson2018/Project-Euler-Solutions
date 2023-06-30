@@ -1,3 +1,12 @@
+# Pages that help me with this:
+#
+# Theorems about mean/variance for discrete probability:
+# 	https://proofwiki.org/wiki/Variance_of_Discrete_Random_Variable_from_PGF
+#		https://proofwiki.org/wiki/Expectation_of_Discrete_Random_Variable_from_PGF
+#
+# Dice generating functions:
+# 	http://www.qbyte.org/puzzles/p041s.html
+
 def dice(n):
 	R, _ = QQ['t'].objgen()
 	return (1/n) * integrate(R(range(1,n+1)))
