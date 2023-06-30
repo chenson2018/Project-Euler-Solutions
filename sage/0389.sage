@@ -1,4 +1,4 @@
-# Pages that help me with this:
+# Pages that helped me with this:
 #
 # Theorems about mean/variance for discrete probability:
 # 	https://proofwiki.org/wiki/Variance_of_Discrete_Random_Variable_from_PGF
