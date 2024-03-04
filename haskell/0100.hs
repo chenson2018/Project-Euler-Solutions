@@ -1,8 +1,8 @@
 iterBlue :: (Int, Int) -> (Int, Int)
-iterBlue (x, y) = (x, 1 + 2 * x - y)
+iterBlue (r, b) = (r, 1 + 2 * r - b)
 
 iterRed :: (Int, Int) -> (Int, Int)
-iterRed (x, y) = (1 - x - 2 * y, y)
+iterRed (r, b) = (1 - r - 2 * b, b)
 
 spiral :: (Int, Int) -> Int -> (Int, Int)
 spiral init 0 = init
