@@ -1,3 +1,5 @@
+-- question here: https://projecteuler.net/problem=100
+
 iterBlue :: (Int, Int) -> (Int, Int)
 iterBlue (r, b) = (r, 1 + 2 * r - b)
 
