@@ -21,6 +21,6 @@ main = do
   let xs = map (spiral (0, 0)) [0 ..]
   let ys = map (spiral (1, 0)) [0 ..]
   let spiral = merge xs ys
-  let positive_spiral = filter (\(red, blue) -> red > 0 && blue > 0) spiral
+  let positive_spiral = filter (all (> 0)) spiral
   let ans = snd $ head $ filter ((> 10 ^ 12) . uncurry (+)) positive_spiral
   print ans
