@@ -11,11 +11,9 @@ uniq [] = []
 uniq (x : xs) = x : uniq (filter (/= x) xs)
 
 {-
-See https://wiki.haskell.org/Memoization
+`path n` is a list of lists, where each list is a possible path of exponentiation
 
-`memoPath n` is a list of lists, where each list is a possible path of exponentiation
-
-I keep the lists in order so that the maximum element (greatest exponent) is the head
+I keep the lists in order so that the greatest exponent is the head
 
 the thought process is
    - given the list of exponents we have already, consider all combinations with itself for our next multiplication
@@ -23,14 +21,12 @@ the thought process is
    - filter out duplicates (e.g. 1 + n = 2 + n - 1 = 3 + n - 2 = ...)
    - append this new exponent
 -}
-memoPath :: Int -> [[Int]]
-memoPath = (map path [0 ..] !!)
+path :: Int -> [[Int]]
+path 0 = [[1]]
+path n = concatMap (\xs -> map (: xs) $ uniq $ filter (> head xs) (nextMul xs)) prev
   where
-    path 0 = [[1]]
-    path n = concatMap (\xs -> map (: xs) $ uniq $ filter (> head xs) (nextMul xs)) prev
-      where
-        prev = path (n - 1)
-        nextMul xs = cartWith (+) xs xs
+    prev = path (n - 1)
+    nextMul xs = cartWith (+) xs xs
 
 -- this is cool, a practical use of the applicative style
 minPath :: [[Int]] -> Int -> Maybe Int
@@ -41,7 +37,7 @@ minPath (x : xs) n
 
 main :: IO ()
 main = do
-  let mems = map (concat . memoPath) [0 ..]
+  let mems = map (concat . path) [0 ..]
   let mins = map (minPath mems) [1 .. 200]
   let ans = (fmap sum . sequence) mins
   print ans
