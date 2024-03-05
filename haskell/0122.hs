@@ -6,9 +6,9 @@
 I keep the lists in order so that the greatest exponent is the head
 
 the thought process is
-   - given the list of exponents we have already, consider all combinations with itself and the greatest exponent (valid for n < 12509)
-   - filter out duplicates (e.g. 1 + n = 2 + n - 1 = 3 + n - 2 = ...)
-   - append this new exponent
+   - start with a the list of exponents we have already, with a base case of [[1]]
+   - consider all combinations with itself and the greatest exponent (valid for n < 12509)
+   - append this new exponent and flatten the possibilities into a single list
 -}
 
 -- `map <$> xs <*> ys` is a fork!!
