@@ -13,7 +13,7 @@ the thought process is
 
 -- See https://aplwiki.com/wiki/Train
 fork :: (a -> b -> c) -> (d -> a) -> (d -> b) -> d -> c
-fork combine f g d = combine (f d) (g d)
+fork f g h x = f (g x) (h x)
 
 paths :: Int -> [[Int]]
 paths 0 = [[1]]
