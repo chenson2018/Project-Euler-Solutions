@@ -1,9 +1,5 @@
 -- problem here: https://projecteuler.net/problem=122
 
--- apply a function to the Cartesian product of two lists
-cartWith :: (a -> b -> c) -> [a] -> [b] -> [c]
-cartWith f xs ys = [f x y | x <- xs, y <- ys]
-
 {-
 `path n` is a list of lists, where each list is a possible path of exponentiation
 
@@ -19,7 +15,7 @@ path 0 = [[1]]
 path n = concatMap (\xs -> map (: xs) $ nextMul xs) prev
   where
     prev = path (n - 1)
-    nextMul xs = cartWith (+) xs [head xs]
+    nextMul xs = (+) <$> xs <*> [head xs]
 
 -- this is cool, a practical use of the applicative style
 minPath :: [[Int]] -> Int -> Maybe Int
