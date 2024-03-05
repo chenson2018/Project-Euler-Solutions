@@ -4,29 +4,23 @@
 cartWith :: (a -> b -> c) -> [a] -> [b] -> [c]
 cartWith f xs ys = [f x y | x <- xs, y <- ys]
 
--- remove duplicates from a list
--- not sure what is most efficient, got this from SO
-uniq :: (Eq a) => [a] -> [a]
-uniq [] = []
-uniq (x : xs) = x : uniq (filter (/= x) xs)
-
 {-
 `path n` is a list of lists, where each list is a possible path of exponentiation
 
 I keep the lists in order so that the greatest exponent is the head
 
 the thought process is
-   - given the list of exponents we have already, consider all combinations with itself for our next multiplication
+   - given the list of exponents we have already, consider all combinations with itself and the greatest exponent (valid for n < 12509)
    - filter out any results smaller than the largest exponent
    - filter out duplicates (e.g. 1 + n = 2 + n - 1 = 3 + n - 2 = ...)
    - append this new exponent
 -}
 path :: Int -> [[Int]]
 path 0 = [[1]]
-path n = concatMap (\xs -> map (: xs) $ uniq $ filter (> head xs) (nextMul xs)) prev
+path n = concatMap (\xs -> map (: xs) $ nextMul xs) prev
   where
     prev = path (n - 1)
-    nextMul xs = cartWith (+) xs xs
+    nextMul xs = cartWith (+) xs [head xs]
 
 -- this is cool, a practical use of the applicative style
 minPath :: [[Int]] -> Int -> Maybe Int
