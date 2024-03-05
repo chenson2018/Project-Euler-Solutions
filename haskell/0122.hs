@@ -11,15 +11,15 @@ the thought process is
    - append this new exponent
 -}
 
+-- `map <$> xs <*> ys` is a fork!!
 -- See https://aplwiki.com/wiki/Train
-fork :: (a -> b -> c) -> (d -> a) -> (d -> b) -> d -> c
-fork f g h x = f (g x) (h x)
 
 paths :: Int -> [[Int]]
 paths 0 = [[1]]
-paths n = concatMap (fork map (flip (:)) nextMul) prev
+paths n = concatMap consNext prev
   where
     prev = paths (n - 1)
+    consNext = map <$> flip (:) <*> nextMul
     nextMul xs = (+) <$> xs <*> [head xs]
 
 -- this is cool, a practical use of the applicative style
