@@ -1,7 +1,7 @@
 -- problem here: https://projecteuler.net/problem=122
 
 {-
-`path n` is a list of lists, where each list is a possible path of exponentiation
+`paths n` is a list of lists, where each list is a possible path of exponentiation
 
 I keep the lists in order so that the greatest exponent is the head
 
@@ -10,23 +10,29 @@ the thought process is
    - filter out duplicates (e.g. 1 + n = 2 + n - 1 = 3 + n - 2 = ...)
    - append this new exponent
 -}
-path :: Int -> [[Int]]
-path 0 = [[1]]
-path n = concatMap (\xs -> map (: xs) $ nextMul xs) prev
+
+-- See https://aplwiki.com/wiki/Train
+fork :: (a -> b -> c) -> (d -> a) -> (d -> b) -> d -> c
+fork combine f g d = combine (f d) (g d)
+
+paths :: Int -> [[Int]]
+paths 0 = [[1]]
+paths n = concatMap (fork map (flip (:)) nextMul) prev
   where
-    prev = path (n - 1)
+    prev = paths (n - 1)
     nextMul xs = (+) <$> xs <*> [head xs]
 
 -- this is cool, a practical use of the applicative style
-minPath :: [[Int]] -> Int -> Maybe Int
+-- note how this allows us to "fail" for a finite list without enough depth
+minPath :: [[[Int]]] -> Int -> Maybe Int
 minPath [] _ = Nothing
 minPath (x : xs) n
-  | n `elem` x = Just 0
+  | any (elem n) x = Just 0
   | otherwise = (+) <$> Just 1 <*> minPath xs n
 
 main :: IO ()
 main = do
-  let mems = map (concat . path) [0 ..]
+  let mems = map paths [0 ..]
   let mins = map (minPath mems) [1 .. 200]
   let ans = (fmap sum . sequence) mins
   print ans
