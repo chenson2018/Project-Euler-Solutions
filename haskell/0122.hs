@@ -11,7 +11,6 @@ I keep the lists in order so that the greatest exponent is the head
 
 the thought process is
    - given the list of exponents we have already, consider all combinations with itself and the greatest exponent (valid for n < 12509)
-   - filter out any results smaller than the largest exponent
    - filter out duplicates (e.g. 1 + n = 2 + n - 1 = 3 + n - 2 = ...)
    - append this new exponent
 -}
