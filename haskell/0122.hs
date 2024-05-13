@@ -28,7 +28,7 @@ minPath :: [[[Int]]] -> Int -> Maybe Int
 minPath [] _ = Nothing
 minPath (x : xs) n
   | any (elem n) x = Just 0
-  | otherwise = (+) <$> Just 1 <*> minPath xs n
+  | otherwise = (+1) <$> minPath xs n
 
 main :: IO ()
 main = do
